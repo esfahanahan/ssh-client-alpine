@@ -20,7 +20,7 @@ GitLab Runner's Docker executor accepts the same override:
 
 ```yaml
 image:
-  name: ghcr.io/esfahanahanbot/ssh-client-alpine:1.2.3
+  name: ghcr.io/esfahanahan/ssh-client-alpine:v1.0.0
   docker:
     user: root
 ```
@@ -38,12 +38,12 @@ docker build --tag ssh-client-alpine:local .
 ```bash
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
-  --tag ghcr.io/esfahanahanbot/ssh-client-alpine:1.2.3 \
+  --tag ghcr.io/esfahanahan/ssh-client-alpine:v1.0.0 \
   --push \
   .
 ```
 
-Version tags such as `v1.2.3` build both platforms in GitHub Actions and push to GHCR (`ghcr.io/<owner>/<repo>`) and Docker Hub (`<namespace>/ssh-client-alpine`) with provenance. Neither registry is private. GitHub may create the package as private on the first push; set the package visibility to public if the repository is public. On Docker Hub, confirm the repository is public after the first push.
+Run the Release workflow by hand from the Actions tab and enter the current tag, `v1.0.0`. That builds both platforms and pushes `v1.0.0`, `1.0.0`, `1.0`, and `1` to GHCR (`ghcr.io/esfahanahan/ssh-client-alpine`) and Docker Hub (`<namespace>/ssh-client-alpine`) with provenance. Pushing a git tag does not publish the image. Neither registry is private. GitHub may create the package as private on the first push; set the package visibility to public if the repository is public. On Docker Hub, confirm the repository is public after the first push.
 
 ## Usage
 
@@ -103,7 +103,7 @@ GitLab CI, with a File-type variable `DEPLOY_KEY`. GitLab stores the key in a te
 ```yaml
 deploy:
   image:
-    name: ghcr.io/esfahanahanbot/ssh-client-alpine:1.2.3
+    name: ghcr.io/esfahanahan/ssh-client-alpine:v1.0.0
     entrypoint: [""]
     docker:
       user: root

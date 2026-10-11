@@ -1,4 +1,5 @@
-# Build linux/amd64 and linux/arm64 and push to GHCR and Docker Hub on a version tag.
+# Build linux/amd64 and linux/arm64 and push to GHCR and Docker Hub.
+# Start this workflow by hand and pass a version such as v1.0.0.
 # Both registries are public. No private registry.
 # Docker Hub login uses DOCKERHUB_USERNAME and DOCKERHUB_TOKEN.
 # The image name is DOCKERHUB_IMAGE, for example myorg/ssh-client-alpine.
@@ -6,10 +7,12 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
-      - "v[0-9]+.[0-9]+.[0-9]+-*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Image version, such as v1.0.0"
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -23,6 +26,18 @@ jobs:
       attestations: write
       id-token: write
     steps:
+      - name: Check version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          case "$VERSION" in
+            v[0-9]*.[0-9]*.[0-9]*|[0-9]*.[0-9]*.[0-9]*) ;;
+            *)
+              echo "version must look like v1.2.3" >&2
+              exit 1
+              ;;
+          esac
+
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -53,10 +68,10 @@ jobs:
             ghcr.io/${{ github.repository }}
             ${{ vars.DOCKERHUB_IMAGE }}
           tags: |
-            type=semver,pattern={{raw}}
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
+            type=semver,pattern={{raw}},value=${{ inputs.version }}
+            type=semver,pattern={{version}},value=${{ inputs.version }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ inputs.version }}
+            type=semver,pattern={{major}},value=${{ inputs.version }}
           labels: |
             org.opencontainers.image.title=ssh-client-alpine
             org.opencontainers.image.description=OpenSSH client on Alpine, with complete -F profiles for non-interactive CI.
