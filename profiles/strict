@@ -1,0 +1,7 @@
+# Complete ssh_config. ssh -F uses only this file.
+# Refuses unknown hosts and never prompts.
+Host *
+    StrictHostKeyChecking yes
+    BatchMode yes
+    ConnectTimeout 10
+    IdentitiesOnly yes

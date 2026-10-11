@@ -1,0 +1,9 @@
+# Complete ssh_config. ssh -F uses only this file.
+# Does not verify the host key. Trusts whatever answers at that address.
+Host *
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    BatchMode yes
+    LogLevel ERROR
+    ConnectTimeout 10
+    IdentitiesOnly yes

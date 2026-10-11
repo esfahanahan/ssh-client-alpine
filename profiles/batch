@@ -1,0 +1,8 @@
+# Complete ssh_config. ssh -F uses only this file.
+# For a job that already has known_hosts and must not prompt.
+Host *
+    BatchMode yes
+    ConnectTimeout 10
+    ServerAliveInterval 30
+    ServerAliveCountMax 3
+    IdentitiesOnly yes

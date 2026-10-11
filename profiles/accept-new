@@ -1,0 +1,9 @@
+# Complete ssh_config. ssh -F uses only this file.
+# Trust on first use. A changed host key still fails.
+# known_hosts is stored under the current user's home.
+Host *
+    StrictHostKeyChecking accept-new
+    BatchMode yes
+    ConnectTimeout 10
+    IdentitiesOnly yes
+    UserKnownHostsFile ~/.ssh/known_hosts
