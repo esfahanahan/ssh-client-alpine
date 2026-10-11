@@ -43,7 +43,7 @@ docker buildx build \
   .
 ```
 
-Version tags such as `v1.2.3` build both platforms in GitHub Actions and push to `ghcr.io/<owner>/<repo>` with provenance. The workflow does not push to a private registry. GitHub may create the package as private on the first push; set the package visibility to public if the repository is public.
+Version tags such as `v1.2.3` build both platforms in GitHub Actions and push to GHCR (`ghcr.io/<owner>/<repo>`) and Docker Hub (`<namespace>/ssh-client-alpine`) with provenance. Neither registry is private. GitHub may create the package as private on the first push; set the package visibility to public if the repository is public. On Docker Hub, confirm the repository is public after the first push.
 
 ## Usage
 

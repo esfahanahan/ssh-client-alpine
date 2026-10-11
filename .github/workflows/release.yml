@@ -1,5 +1,7 @@
-# Build linux/amd64 and linux/arm64 and push to GHCR on a version tag.
-# This workflow does not use a private registry.
+# Build linux/amd64 and linux/arm64 and push to GHCR and Docker Hub on a version tag.
+# Both registries are public. No private registry.
+# Docker Hub login uses DOCKERHUB_USERNAME and DOCKERHUB_TOKEN.
+# The image name is DOCKERHUB_IMAGE, for example myorg/ssh-client-alpine.
 
 name: Release
 
@@ -37,11 +39,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Log in to Docker Hub
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Image metadata
         id: meta
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: |
+            ghcr.io/${{ github.repository }}
+            ${{ vars.DOCKERHUB_IMAGE }}
           tags: |
             type=semver,pattern={{raw}}
             type=semver,pattern={{version}}
